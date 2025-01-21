@@ -6,9 +6,10 @@
       <input
         type="text"
         class="search-bar"
+        v-model="searchQuery"
         placeholder="Search by address, zip code, or city"
       />
-      <button class="search-button">Search</button>
+      <button class="search-button" @click="goToListings">Search</button>
     </div>
   </div>
 </template>
@@ -20,6 +21,18 @@ export default {
   name: "HomePage",
   components: {
     SiteHeader,
+  },
+  data() {
+    return {
+      searchQuery: "",
+    };
+  },
+  methods: {
+    goToListings() {
+      if (this.searchQuery.trim()) {
+        this.$router.push({ name: "Listings", query: { search: this.searchQuery } });
+      }
+    },
   },
 };
 </script>
@@ -35,6 +48,7 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
+  background-size: cover;
 
 }
 
