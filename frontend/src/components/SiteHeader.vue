@@ -50,7 +50,7 @@ html, body {
   padding: 20px;
   width: 100%; /* Ensures the header spans the entire width */
   height: 100px; /* Adjust to the desired height of the header */
-  background-color: #50614f; /* Dark green background color */
+  background: linear-gradient(to bottom, #50611f, #50614f); /* Gradient from light to dark */
   color: white;
 }
 

@@ -2,7 +2,7 @@
     <div class="listings-container">
       <div class="map-container">
         <SiteHeader />
-
+        <ListingFilters />
         <input type="text" v-model="searchQuery" placeholder="Enter a location" @keyup.enter="searchLocation" />
         <div ref="mapContainer" class="map"></div>
       </div>
@@ -17,10 +17,12 @@
   import mapboxgl from 'mapbox-gl';
   import SiteHeader from "./SiteHeader.vue";
   import { config } from '../../config';
+import ListingFilters from './ListingFilters.vue';
 
   export default {
   components: {
     SiteHeader,
+    ListingFilters,
   },
   data() {
     return {

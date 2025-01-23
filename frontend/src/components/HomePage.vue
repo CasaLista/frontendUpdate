@@ -8,8 +8,8 @@
         class="search-bar"
         v-model="searchQuery"
         placeholder="Search by address, zip code, or city"
-      />
-      <button class="search-button" @click="goToListings">Search</button>
+        @keydown.enter="goToListings" />
+      <button class="search-button" @click="goToListings">Search</button>  <!-- Trigger method on click -->
     </div>
   </div>
 </template>
