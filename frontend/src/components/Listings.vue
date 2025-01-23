@@ -1,39 +1,54 @@
 <template>
-    <div class="listings-container">
-      <div class="map-container">
-        <SiteHeader />
-        <ListingFilters />
-        <input type="text" v-model="searchQuery" placeholder="Enter a location" @keyup.enter="searchLocation" />
-        <div ref="mapContainer" class="map"></div>
-      </div>
-      <div class="listings-panel">
-        <h2>Listings</h2>
-        <p>Not available</p>
-      </div>
+  <div class="listings-container">
+    
+    <div class="map-container">
+      <SiteHeader />
+      <ListingFilters />
+      <input 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="Enter a location" 
+        @keyup.enter="searchLocation" 
+      />
+      <div ref="mapContainer" class="map"></div>
+      <ListingFooter />
     </div>
-  </template>
-  
-  <script>
-  import mapboxgl from 'mapbox-gl';
-  import SiteHeader from "./SiteHeader.vue";
-  import { config } from '../../config';
-import ListingFilters from './ListingFilters.vue';
+    <ListingPanel :listings="filteredListings" />
+  </div>
+</template>
 
-  export default {
+<script>
+import mapboxgl from 'mapbox-gl';
+import SiteHeader from "./SiteHeader.vue";
+import ListingFilters from './ListingFilters.vue';
+import ListingPanel from './ListingPanel.vue';
+import ListingFooter from './ListingFooter.vue';
+
+import { config } from '../../config';
+
+export default {
   components: {
     SiteHeader,
     ListingFilters,
+    ListingPanel,
+    ListingFooter,
   },
   data() {
     return {
-      searchQuery: this.$route.query.search || '', // Get search query from URL
+      searchQuery: this.$route.query.search || '',
       map: null,
+      allListings: [
+        { id: 1, name: "Casa Bonita", price: "$200,000", coords: [-99.1332, 19.4326] },
+        { id: 2, name: "Villa Azul", price: "$350,000", coords: [-99.1400, 19.4400] },
+        { id: 3, name: "Penthouse MX", price: "$500,000", coords: [-99.1500, 19.4500] },
+      ],
+      filteredListings: [],
     };
   },
   watch: {
     '$route.query.search': function(newSearch) {
-      this.searchQuery = newSearch; // Update searchQuery when it changes in the route
-      this.searchLocation(); // Trigger the searchLocation method if needed
+      this.searchQuery = newSearch;
+      this.searchLocation();
     }
   },
   mounted() {
@@ -45,10 +60,13 @@ import ListingFilters from './ListingFilters.vue';
       zoom: 12,
     });
 
-    // Perform location search if a query is provided in the URL when mounted
+    this.map.on('moveend', this.filterListingsByBounds);
+
     if (this.searchQuery) {
       this.searchLocation();
     }
+
+    this.filterListingsByBounds();  // Initial filtering
   },
   methods: {
     searchLocation() {
@@ -64,40 +82,47 @@ import ListingFilters from './ListingFilters.vue';
           .catch(error => console.error('Error fetching location:', error));
       }
     },
+    filterListingsByBounds() {
+      const bounds = this.map.getBounds(); // Get current map bounds
+      this.filteredListings = this.allListings.filter(listing => {
+        const [lng, lat] = listing.coords;
+        return bounds.contains([lng, lat]);
+      });
+    }
   },
 };
-  </script>
-  
-  <style scoped>
-  .listings-container {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-  }
-  .map-container {
-    position: relative;
-    width: 60%;
-    height: 100%;
-  }
-  .listings-panel {
-    width: 40%;
-    background-color: #f4f4f4;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  }
-  .map {
-    width: 100%;
-    height: calc(100% - 50px);
-  }
-  input {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px;
-    font-size: 16px;
-    width: 300px;
-    z-index: 1;
-  }
-  </style>
-  
+</script>
+
+<style scoped>
+.listings-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  font-family: 'CoFo Sans', sans-serif;
+
+}
+.map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  width: 60%;
+  height: 100%;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+  z-index: 1;
+  margin-top: 10px;
+  font-family: 'CoFo Sans', sans-serif;
+
+}
+.map {
+  width: 100%;
+  height: calc(100% - 50px);
+}
+
+</style>

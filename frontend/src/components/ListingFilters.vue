@@ -107,6 +107,8 @@
     background-color: #f4f4f4;
     border-radius: 8px;
     margin-top: 20px;
+    font-family: 'CoFo Sans', sans-serif;
+
   }
   
   .filter-group {
@@ -115,11 +117,15 @@
     gap: 8px;
     flex: 1;
     min-width: 120px;
+    font-family: 'CoFo Sans', sans-serif;
+
   }
   
   label {
     font-size: 0.9rem;
     margin-right: 5px;
+    font-family: 'CoFo Sans', sans-serif;
+
   }
   
   select,
@@ -131,6 +137,8 @@
     width: 100%;
     max-width: 120px;
     height: 28px;
+    font-family: 'CoFo Sans', sans-serif;
+
   }
   
   button {
@@ -143,6 +151,8 @@
     cursor: pointer;
     width: 100%;
     margin-top: 1rem;
+    font-family: 'CoFo Sans', sans-serif;
+
   }
   
   button:hover {
